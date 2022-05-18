@@ -1,13 +1,38 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useForm } from "react-hook-form";
+import { useAuthState, useSignInWithEmailAndPassword, useSignInWithGoogle } from 'react-firebase-hooks/auth';
+import { auth } from '../../firebase.init';
 
 
 const Login = () => {
+    const [user] = useAuthState(auth)
+    const navigate = useNavigate();
+    const location = useLocation();
+    const from = location.state?.form?.pathname || '/'
+
+    const [
+        signInWithEmailAndPassword,
+        eUser,
+        eLoading,
+        eError,
+    ] = useSignInWithEmailAndPassword(auth);
+
+    const [signInWithGoogle, gUser, gLoading, gError] = useSignInWithGoogle(auth);
 
     const { register, formState: { errors }, handleSubmit } = useForm();
     const onSubmit = data => {
         console.log(data)
+        signInWithEmailAndPassword(data?.email, data?.password)
+    }
+
+    if (eLoading || gLoading) return <p>Loading...</p>
+    if (eError || gError) {
+        console.log(eError || gError);
+    }
+
+    if (user || eUser || gUser) {
+        navigate(from)
     }
     return (
         <div class="hero min-h-screen bg-base-200">
@@ -76,8 +101,10 @@ const Login = () => {
                     </div>
                     <span className='text-sm text-secondary'>Haven't an account? <Link className='text-info' to='/signup'>Sign up</Link></span>
                     <div class="divider w-[80%] mx-auto">OR</div>
-                    <div class="form-control">
-                        <button class="btn btn-primary btn-outline ">Continue With Google</button>
+                    <div class="">
+                        <p
+                            onClick={() => signInWithGoogle()}
+                            class="btn btn-block btn-primary btn-outline ">Continue With Google</p>
                     </div>
                 </form>
 
