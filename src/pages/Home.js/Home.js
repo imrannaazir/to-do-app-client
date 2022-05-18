@@ -5,6 +5,7 @@ import React from 'react';
 
 import FormSec from './FormSec';
 import Header from './Header';
+import Tasks from './Tasks'
 
 const Home = () => {
 
@@ -20,6 +21,7 @@ const Home = () => {
 
                     <FormSec />
                     <div class="divider"></div>
+                    <Tasks />
                 </div>
             </div>
         </div>
