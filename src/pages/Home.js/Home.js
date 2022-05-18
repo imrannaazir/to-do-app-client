@@ -1,6 +1,6 @@
 
 
-import React from 'react';
+import React, { useState } from 'react';
 
 
 import FormSec from './FormSec';
@@ -8,6 +8,7 @@ import Header from './Header';
 import Tasks from './Tasks'
 
 const Home = () => {
+    const [tasks, setTasks] = useState([])
 
     return (
         <div className='w-full flex justify-center items-center min-h-screen bg-base-300'>
@@ -19,9 +20,9 @@ const Home = () => {
 
                 <div class="card-body items-center text-center">
 
-                    <FormSec />
+                    <FormSec setTasks={setTasks} />
                     <div class="divider"></div>
-                    <Tasks />
+                    <Tasks setTasks={setTasks} tasks={tasks} />
                 </div>
             </div>
         </div>

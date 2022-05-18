@@ -3,17 +3,24 @@ import React from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../../firebase.init';
 
-const FormSec = () => {
+const FormSec = ({ setTasks }) => {
     const [user] = useAuthState(auth)
     const handleSubmit = async e => {
         e.preventDefault();
+        const email = user?.email
         const newTask = {
             name: e.target.name?.value,
             description: e.target.description?.value,
-            email: user?.email
+            email: email
         }
-        const { data } = await axios.post('http://localhost:5000/tasks', newTask)
-        console.log(data);
+        await axios.post('http://localhost:5000/tasks', newTask)
+            .then(async res => {
+
+                const { data } = await axios.get(`http://localhost:5000/tasks?email=${user?.email}`)
+                setTasks(data);
+            })
+
+        e.target.reset();
 
     }
     return (
@@ -34,7 +41,7 @@ const FormSec = () => {
                 placeholder="Description"
                 class="input input-bordered input-primary w-full h-24"
             />
-            <button type='submit' class="btn btn-block btn-primary">Buy Now</button>
+            <button type='submit' class="btn btn-block btn-primary">Add Task</button>
         </form>
     );
 };

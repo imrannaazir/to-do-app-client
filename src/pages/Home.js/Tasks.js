@@ -1,19 +1,19 @@
-import { async } from '@firebase/util';
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../../firebase.init';
+import Task from './Task';
 
-const Tasks = () => {
+const Tasks = ({ tasks, setTasks }) => {
     const [user] = useAuthState(auth);
+
     const email = user?.email;
-    const [tasks, setTasks] = useState([]);
     useEffect(() => {
         (async function () {
             const { data } = await axios.get(`http://localhost:5000/tasks?email=${email}`)
             setTasks(data);
         })()
-    }, [email])
+    }, [email, setTasks])
 
 
     const handleDelete = async (id) => {
@@ -31,23 +31,15 @@ const Tasks = () => {
                         <th>SL</th>
                         <th>Task</th>
                         <th>Description</th>
-                        <th>Complete</th>
+                        <th >Complete</th>
                         <th>Delete</th>
                     </tr>
                 </thead>
                 <tbody>
 
                     {
-                        tasks.map((task, index) =>
-                            <tr>
-                                <th>{index + 1}</th>
-                                <td>{task.name}</td>
-                                <td>{task.description}</td>
-                                <td>✅</td>
-                                <td
-                                    className='cursor-pointer'
-                                    onClick={() => handleDelete(task._id)}>❌</td>
-                            </tr>
+                        tasks.map((task, index) => <Task task={task} index={index} handleDelete={handleDelete} />
+
                         )
                     }
 
