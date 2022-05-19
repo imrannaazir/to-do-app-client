@@ -1,3 +1,4 @@
+import { Toaster } from 'react-hot-toast';
 import { Route, Routes } from 'react-router-dom';
 import './App.css';
 import Login from './pages/auth/Login';
@@ -8,6 +9,7 @@ import Home from './pages/Home.js/Home';
 function App() {
   return (
     <div>
+      <Toaster />
       <Routes>
         <Route path='/' element={<RequireAuth><Home /></RequireAuth>} />
         <Route path='/login' element={<Login />} />

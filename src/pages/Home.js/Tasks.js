@@ -10,41 +10,43 @@ const Tasks = ({ tasks, setTasks }) => {
     const email = user?.email;
     useEffect(() => {
         (async function () {
-            const { data } = await axios.get(`http://localhost:5000/tasks?email=${email}`)
+            const { data } = await axios.get(`https://gentle-shore-14514.herokuapp.com/tasks?email=${email}`)
             setTasks(data);
         })()
     }, [email, setTasks])
 
 
     const handleDelete = async (id) => {
-        const { data } = await axios.delete(`http://localhost:5000/tasks/${id}`)
+        const { data } = await axios.delete(`https://gentle-shore-14514.herokuapp.com/tasks/${id}`)
         console.log(data);
         const restTask = tasks.filter(task => task._id !== id)
         setTasks(restTask)
     }
     return (
         <div class="overflow-x-auto w-full">
-            <table class="table table-zebra w-full">
-                {/* <!-- head --> */}
-                <thead>
-                    <tr>
-                        <th>SL</th>
-                        <th>Task</th>
-                        <th>Description</th>
-                        <th >Complete</th>
-                        <th>Delete</th>
-                    </tr>
-                </thead>
-                <tbody>
+            {tasks.length === 0 ? <p className='text-secondary text-lg'>You have no remaining Task!</p>
+                :
+                <table class="table table-zebra w-full">
+                    {/* <!-- head --> */}
+                    <thead>
+                        <tr>
+                            <th>SL</th>
+                            <th>Task</th>
+                            <th>Description</th>
+                            <th >Complete</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
 
-                    {
-                        tasks.map((task, index) => <Task task={task} index={index} handleDelete={handleDelete} />
+                        {
+                            tasks.map((task, index) => <Task task={task} index={index} handleDelete={handleDelete} />
 
-                        )
-                    }
+                            )
+                        }
 
-                </tbody>
-            </table>
+                    </tbody>
+                </table>}
         </div>
     );
 };

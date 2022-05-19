@@ -11,12 +11,13 @@ const FormSec = ({ setTasks }) => {
         const newTask = {
             name: e.target.name?.value,
             description: e.target.description?.value,
-            email: email
+            email: email,
+            complete: false
         }
-        await axios.post('http://localhost:5000/tasks', newTask)
+        await axios.post('https://gentle-shore-14514.herokuapp.com/tasks', newTask)
             .then(async res => {
 
-                const { data } = await axios.get(`http://localhost:5000/tasks?email=${user?.email}`)
+                const { data } = await axios.get(`https://gentle-shore-14514.herokuapp.com/tasks?email=${user?.email}`)
                 setTasks(data);
             })
 
